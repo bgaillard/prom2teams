@@ -1,5 +1,6 @@
 import logging.config
 import os
+import psutil
 
 from flask import Flask, Blueprint, send_from_directory
 from marshmallow.exceptions import ValidationError
@@ -24,11 +25,19 @@ def favicon():
 
 @app.route('/alive')
 def alive():
+
+    memory_usage = psutil.virtual_memory()
+    log.debug(f"api - /alive - Memory Usage: {memory_usage.percent}%")
+
     return "YES", 200
 
 
 @app.route('/ready')
 def ready():
+
+    memory_usage = psutil.virtual_memory()
+    log.debug(f"api - /ready - Memory Usage: {memory_usage.percent}%")
+
     return ("YES", 200) if app.config['FINISH_INIT'] else ("NO", 503)
 
 
@@ -39,6 +48,10 @@ def error_handler(e):
         return str(e), e.code
     if isinstance(e, ValidationError):
         return str(e), 400
+
+    memory_usage = psutil.virtual_memory()
+    log.debug(f"error_handler - Memory Usage: {memory_usage.percent}%")
+
     return str(e), 500
 
 

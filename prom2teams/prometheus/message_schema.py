@@ -7,6 +7,7 @@ log = logging.getLogger('prom2teams')
 class MessageSchema(Schema):
     class Meta:
         unknown = INCLUDE
+
     def __init__(self, exclude_fields=tuple(), exclude_annotations=tuple()):
         super().__init__()
         self.exclude_fields = exclude_fields
@@ -25,6 +26,7 @@ class MessageSchema(Schema):
     @post_load()
     def get_alerts(self, message):
         log.debug('JSON received is:\n%s', str(message))
+
         prom_alerts = []
 
         base_labels = ('alertname', 'device', 'fstype', 'instance', 'mountpoint', 'severity')

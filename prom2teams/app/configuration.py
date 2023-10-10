@@ -129,6 +129,10 @@ def config_app(application):
         if command_line_args.groupalertsby:
             application.config['GROUP_ALERTS_BY'] = command_line_args.groupalertsby
         if command_line_args.enablemetrics or os.environ.get('PROM2TEAMS_PROMETHEUS_METRICS', False):
+
+            print("configuration - Enabling prometheus metrics")
+            print("configuration - application.config['ENV'] = " + application.config['ENV'])
+
             os.environ["DEBUG_METRICS"] = "True"
             if application.config['ENV'] == "werkzeug":
                 from prometheus_flask_exporter import PrometheusMetrics
